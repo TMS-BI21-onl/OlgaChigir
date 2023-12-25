@@ -1,0 +1,13 @@
+Well done!
+
+It would be more convinient, if you would add homework as .txt or .sql. Thanks!
+
+1.c,d
+If we have only one condition it makes more sence to use equals sign: WHERE LastName='Norman'. Your solution works too, it's just not the prettiest.
+
+4.a
+Here it was asked to COUNT(DISTINCT PersonType). The correct answer should be 6.
+Also, you were almost correct with LIKE condition. As you wrote it, it would work as !=1 and we need it to work as NOT LIKE '%1%'.
+
+4.e
+Color is not required in the SELECT, but it should ne in WHERE. By 'color is defined' I meant 'color is not null'.
