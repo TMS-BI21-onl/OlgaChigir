@@ -1,0 +1,79 @@
+2)
+1
+SELECT
+PRODUCTNUMBER,
+NAME,
+"Price Range" = CASE
+WHEN StandardCost = 0 THEN 'Not for sale'
+WHEN StandardCost IS NULL THEN 'Not for sale'
+WHEN StandardCost > 0 AND StandardCost < 100 THEN '<$100' 
+WHEN StandardCost >=100 AND StandardCost < 500 THEN '<$500'
+ELSE '>= $500'
+END
+FROM [Production].[Product]
+ORDER BY PRODUCTNUMBER
+
+2
+SELECT
+L.ProductID, 
+L.BusinessEntityID, 
+L.StandardPrice,
+C.Name
+FROM Purchasing.ProductVendor L
+LEFT JOIN Purchasing.Vendor C ON L.BusinessEntityID = C.BusinessEntityID
+WHERE StandardPrice > '10'
+AND (Name LIKE '%X%'
+OR Name LIKE 'N%')
+
+3
+SELECT
+--L.OnOrderQty,
+C.Name
+FROM Purchasing.ProductVendor L
+LEFT JOIN Purchasing.Vendor C ON L.BusinessEntityID = C.BusinessEntityID
+WHERE OnOrderQty IS NULL
+GROUP BY NAME
+
+
+3)
+1
+SELECT
+       --L.StandardCost, --not sure what type of cost shoud we show (from StandardCost or ListPrice) 
+	   L.ListPrice,
+	   R.NAME AS MODEL
+FROM [Production].[Product]L
+LEFT JOIN Production.ProductModel R ON L.ProductModelID=R.ProductModelID
+WHERE R.NAME LIKE 'LL%'
+ORDER BY 2
+
+2
+--if we devide vendor names and shop names 
+SELECT DISTINCT
+T.Name AS VENDOR,
+S.Name AS SHOPS
+FROM
+Purchasing.Vendor T
+FULL JOIN Sales.Store S ON T.BusinessEntityID=S.BusinessEntityID
+ORDER BY 1
+
+
+--if it must be 1 list of names
+
+SELECT distinct CONCAT
+(T.Name,
+S.Name) as Names
+FROM
+Purchasing.Vendor T
+FULL JOIN Sales.Store S ON T.BusinessEntityID=S.BusinessEntityID
+ORDER BY 1
+
+3
+select count(O.SpecialOfferID) AS SPEC_PREDL,
+P.[Name]
+from [Production].[Product] P
+left join 
+[Sales].[SpecialOfferProduct] S on P.ProductID=S.ProductID
+left join
+[Sales].[SpecialOffer] O on S.SpecialOfferID=O.SpecialOfferID
+GROUP BY Name
+HAVING count(O.SpecialOfferID)>1
