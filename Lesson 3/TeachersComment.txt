@@ -1,0 +1,11 @@
+Well done!
+
+2.a
+=0 AND IS NULL can be merged to one WHEN. Your solution works too.
+
+2.c
+It should be "Vendor LEFT JOIN ProductVendor" and WHERE is incorrect. Let's discuss in the lesson.
+Also, what is GROUP BY for?
+
+3.b
+It should be one column, but without join. You can firsly show all names and then underneath them - all stores. 
