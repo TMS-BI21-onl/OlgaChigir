@@ -1,0 +1,88 @@
+3
+Row Number Rank Dense Rank 
+   1        1        1
+   2        2        2
+   3        3        3
+
+
+
+4 a
+SELECT * --DISTINCT *
+FROM [Production].[UnitMeasure]
+WHERE [UnitMeasureCode] LIKE 'T%'
+
+--38 rows
+SELECT COUNT ([UnitMeasureCode]) AS CODES
+FROM [Production].[UnitMeasure]
+
+
+INSERT INTO [Production].[UnitMeasure]([UnitMeasureCode],[Name],[ModifiedDate])
+VALUES ('TT1','Test 1', '2020-09-09 00:00:00.000')
+
+INSERT INTO [Production].[UnitMeasure]([UnitMeasureCode],[Name],[ModifiedDate])
+VALUES ('TT2','Test 2', getdate ())
+
+--2 rows
+SELECT * --COUNT ([UnitMeasureCode]) AS CODES
+FROM [Production].[UnitMeasure]
+WHERE [UnitMeasureCode] LIKE 'T%'
+
+
+b
+select [UnitMeasureCode],[Name],[ModifiedDate]
+into Production.UnitMeasureTest
+from [Production].[UnitMeasure]
+WHERE [UnitMeasureCode] LIKE 'T%'
+
+insert into [Production].[UnitMeasureTest]
+select [UnitMeasureCode], [Name], [ModifiedDate]
+from [Production].[UnitMeasure]
+where [UnitMeasureCode] = 'CAN'
+ORDER BY [UnitMeasureCode]
+
+c
+UPDATE [Production].[UnitMeasureTest]
+SET [UnitMeasureCode] = 'TTT'
+
+d
+DELETE 
+FROM[Production].[UnitMeasureTest]
+
+e
+select *
+from [Sales].[SalesOrderDetail]
+where [SalesOrderID] in ('43659', '43664')
+
+select [SalesOrderID], 
+MAX([LineTotal]) over(partition by[SalesOrderID]) as max,
+MIN([LineTotal])over(partition by[SalesOrderID]) as min,
+AVG([LineTotal])over(partition by[SalesOrderID]) as avg
+from [Sales].[SalesOrderDetail]
+
+f-- didn't understand where should UPPER be passed
+--Linlogin4
+SELECT s.[BusinessEntityID],s.[SalesYTD],
+concat (Left (FirstName,3),'login', [TerritoryID]) as Login
+    ,DENSE_RANK() OVER (ORDER BY [SalesYTD] desc) AS "Dense Rank"  
+FROM [Sales].[SalesPerson] s
+join [Person].[Person] p on s.[BusinessEntityID]=p.[BusinessEntityID] 
+
+--Ranlogin7
+SELECT s.[BusinessEntityID],s.SalesLastYear,
+        --(select upper Login)
+concat (Left (FirstName,3),'login', [TerritoryID]) as Login
+    ,DENSE_RANK() OVER (ORDER BY [SalesLastYear] desc) AS "Dense Rank"  
+FROM [Sales].[SalesPerson] s
+join [Person].[Person] p on s.[BusinessEntityID]=p.[BusinessEntityID]
+
+
+6
+count(1) 4
+count(name) 2
+count(id) 4
+count(*) 4
+Id(PK)	Name		DepName
+1	null		A
+2	null		null
+3	A		C
+4	B		C
