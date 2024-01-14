@@ -1,0 +1,43 @@
+6
+CREATE TABLE PATIENTS (
+        [Id] [INT] IDENTITY,
+        [FirstName] [VARCHAR](100) NOT NULL,
+		[LastName] [VARCHAR](100) NOT NULL,
+		[SSN][VARCHAR](100) NOT NULL,
+        [CreatedDate] DATETIME DEFAULT GETDATE () NOT NULL,
+        [Temp] decimal(3,1),
+		[Email] as (([firstName]) + LEFT([LastName],3) + '@gmail.com'),
+        CONSTRAINT PK_PATIENTS_Id PRIMARY KEY ([Id]))
+
+7
+INSERT INTO [dbo].[PATIENTS] (SSN, FirstName, LastName, Temp)
+VALUES ('1B','Anna','Petrova','38.4')
+
+8
+ALTER TABLE PATIENTS
+ADD TempType AS
+CASE 
+WHEN [Temp] < 37 THEN '< 37°C'
+ELSE '> 37°C'
+END
+
+9
+CREATE VIEW  dbo.PATIENTS_V 
+AS   
+SELECT Temp, 
+       (SELECT (Temp*9/5+32) 
+	   FROM PATIENTS) as Fareng
+FROM PATIENTS 
+
+10
+s funkciei beda(((
+
+12
+SELECT
+first_name,
+CASE
+WHEN END_DATE IS NOT NULL THEN 'Left the company at + (END_DATE)
+ELSE 'Currently Working'
+END as Status
+FROM Employees E
+LEFT JOIN Job_history H on E.Employee_ID=H.Employee_ID   
