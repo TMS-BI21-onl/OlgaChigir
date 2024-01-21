@@ -1,0 +1,6 @@
+Well done!
+
+Please, ask all your question about functions on the next lesson. What is difficult?
+
+7
+And what if employee has worked in multiple departments? Each row in job history will give us "left the company" row, which is not correct.
