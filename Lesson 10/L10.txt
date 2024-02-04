@@ -1,0 +1,15 @@
+SELECT YEAR,
+[1] as January,
+[2] as February,
+[12] as December
+FROM 
+(SELECT YEAR (EndDate) as year, month (EndDate) as month, [OrderQty]
+    FROM [Production].[WorkOrder]
+	WHERE [OrderQty] IS NOT NULL and month (EndDate) in (1,2,12)
+) AS SourceTable  
+PIVOT
+( 
+	SUM([OrderQty])
+	FOR month IN ([1], [2], [12])
+) AS PivotTable
+order by year
