@@ -1,0 +1,34 @@
+Tables
+Patients
+Diseases --spravochnik
+Departments
+Staff
+Schedules
+Provision
+Payments
+1. Find all First Name and Second Name of patients with next symptoms 
+shortness of breath,
+a high temperature,
+chest pain,
+an aching body,
+loss of appetite
+Show only those, who were treated more that 3 weeks.
+2. Find an average income by month from treatment of patients who had surgery in 2023.
+
+
+
+SELECT YEAR,
+[1] as January,
+[2] as February,
+[12] as December
+FROM 
+(SELECT YEAR (EndDate) as year, month (EndDate) as month, [OrderQty]
+    FROM [Production].[WorkOrder]
+	WHERE [OrderQty] IS NOT NULL and month (EndDate) in (1,2,12)
+) AS SourceTable  
+PIVOT
+( 
+	SUM([OrderQty])
+	FOR month IN ([1], [2], [12])
+) AS PivotTable
+order by year
