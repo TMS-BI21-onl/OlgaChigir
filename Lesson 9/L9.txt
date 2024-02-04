@@ -1,0 +1,5 @@
+select concat (A.FirstName,' ',A.LastName) as FirstName_mal,
+       concat (B.FirstName,' ',B.LastName) as FirstName_star
+from People A
+Left JOIN People B on A.ID_Father = B.ID
+where A.FirstName like 'Дмитрий'
