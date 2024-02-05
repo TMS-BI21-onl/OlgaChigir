@@ -1,0 +1,35 @@
+Tables
+Hospital (ID, Patient_id, Disease_id, Staff_id, Department_id, Arrival_Time, Discharge_Time )
+Diseases (Diseases_ID, Name, Symptoms, Treatment, Patient_id, Group_of_tests, Tests_Results)
+Patients (Patient_ID, FirstName, LastName, Diseases_id)
+Staff (Staff_ID, FirstName, LastName, Position, Experience, Department_id)
+Departments (Departments_ID, Name, Schedule, Rooms, Staff_id)
+Provision (Provision_ID, Name, Quantity, Price, Department_id)
+Payments (Payment_ID, Total amount, Patient_id)
+
+1. Find all First Name and Second Name of patients with next symptoms 
+shortness of breath,
+a high temperature,
+chest pain,
+an aching body,
+loss of appetite
+Show only those, who were treated more that 3 weeks.
+2. Find an average income by month from treatment of patients who had surgery in 2023.
+
+
+
+SELECT YEAR,
+[1] as January,
+[2] as February,
+[12] as December
+FROM 
+(SELECT YEAR (EndDate) as year, month (EndDate) as month, [OrderQty]
+    FROM [Production].[WorkOrder]
+	WHERE [OrderQty] IS NOT NULL and month (EndDate) in (1,2,12)
+) AS SourceTable  
+PIVOT
+( 
+	SUM([OrderQty])
+	FOR month IN ([1], [2], [12])
+) AS PivotTable
+order by year
