@@ -1,0 +1,27 @@
+2
+SELECT Type,
+[city],
+[intercity],
+[international]
+    FROM Driver D Left Join Reis R on D.id_driver=R.id_driver
+    Left Join Route RT on R.id_route=RT.id_route
+    Left Join Route_Type T on RT.id_type=T.d_type
+WHERE Date BETWEEN '2022-01-01' and '2022-01-31'
+PIVOT
+( 
+count ([id_reis])
+FOR Type IN ([city], [intercity], [international])
+) AS PivotTable
+
+
+1
+SELECT top 1
+FIO,
+Max (Fine_coast) over (Partition by FIO)
+FROM 
+    Controller C Left Join Reis R on C.id_controller=R.id_controller
+    Left Join  Reis R on D.id_driver=R.id_driver
+    Left Join Route RT on R.id_route=RT.id_route
+    Left Join Route_Type T on RT.id_type=T.d_type
+WHERE Route_type = 'city'
+order by desc
