@@ -1,0 +1,41 @@
+1
+insert into manufacturer (name, country_id)
+values ('HP', '4')
+
+2
+update user
+set name/3
+where name = 'Андрей'
+
+3
+select name, max(price) over ()
+from product
+
+
+select name
+from product
+where price = (select max(price)
+               from product)
+
+select top 1 name, price
+from product
+order by price desc
+
+select name, price, row_number () over (order by price) as rnk 
+from product
+where rn=1
+
+4
+select 
+name
+from users U
+left join phone P on U.id=P.user_id
+where name like '+3%4' or age >35
+
+5
+select top 5 name, count(o.ID) as kol
+from users U
+left join order O on U.id=O.user_id
+group by name
+order by count(o.ID) desk
+
