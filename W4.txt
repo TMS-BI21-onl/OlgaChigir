@@ -1,0 +1,63 @@
+1.
+SELECT ProductSubcategoryID
+FROM 
+    (SELECT ProductSubcategoryID, MIN(weight) as min_w
+     FROM Production.Product
+     GROUP BY ProductSubcategoryID) p
+WHERE p.min_w >150
+
+2.
+1
+SELECT name
+from Production.Product
+WHERE StandardCost=(SELECT MAX(price) FROM Production.Product)
+
+2
+SELECT top 1 with ties name
+FROM Production.Product
+ORDER BY StandardCost DESC
+
+3
+SELECT name 
+FROM 
+(
+	SELECT name, RANK() over (ORDER BY StandardCost DESC) as rnk
+	FROM Production.Product
+) t
+WHERE rnk=1
+
+4
+SELECT name, StandardCost 
+FROM
+(
+	SELECT name, StandardCost, MAX(StandardCost) OVER () as max_cost
+	FROM Production.Product
+) t
+WHERE StandardCost=max_cost
+
+3.
+SELECT FirstName, LastName
+FROM Client
+EXCEPT
+SELECT FirstName, LastName
+FROM Orders O join Client c on o.ClientID=c.ClientID
+WHERE DATEDIFF(day, OrderDate, GETDATE()) <365
+
+4.
+SELECT v.Name, COUNT(o.OrderID) as cnt
+FROM Vendor v o LEFT JOIN Order ON v.VendorID=o.VendorID
+WHERE Orderdate BETWEEN  DATEADD(YEAR, -5, GETDATE()) AND GETDATE()
+GROUP BY v.Name
+ORDER BY 2
+
+5.
+SELECT n.Category, count (trushnie) as kol,
+   (SELECT n.is_read
+   FROM Notifications n 
+   WHERE n.is_read = 'true') as trushnie
+FROM Users u
+Left Join Notifications n on u.id_bigint=n.id_bigint
+WHERE email = 'alex@gmail.com'
+GROUP BY kol
+HAVING count (trushnie) > 50
+
