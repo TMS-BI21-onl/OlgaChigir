@@ -1,0 +1,55 @@
+
+ALTER TABLE [dbo].[data_for_merge] ADD Id INT IDENTITY(1,1);
+-----
+
+MERGE [dbo].[Function_all] AS T_Base --Целевая таблица
+        USING 
+		(select distinct Alex, COUNT(A) OVER (PARTITION BY Alex) as Itog
+from 
+(select Alex, COUNT(id) OVER (PARTITION BY Alex) as A
+from [dbo].[data_for_merge]
+
+union all
+select Carlos, COUNT(id) OVER (PARTITION BY Carlos) as C
+from [dbo].[data_for_merge]
+where Carlos is not null
+
+union all
+select Charles, COUNT(id) OVER (PARTITION BY Charles) as CH
+from [dbo].[data_for_merge]
+where Charles is not null
+
+union all
+select Daniel, COUNT(id) OVER (PARTITION BY Daniel) as D
+from [dbo].[data_for_merge]
+where Daniel is not null
+
+union all
+select Esteban, COUNT(id) OVER (PARTITION BY Esteban) as E
+from [dbo].[data_for_merge]
+where Esteban is not null
+
+union all
+select Fred, COUNT(id) OVER (PARTITION BY Fred) as F
+from [dbo].[data_for_merge]
+where Fred is not null
+
+union all
+select George, COUNT(id) OVER (PARTITION BY George) as G
+from [dbo].[data_for_merge]
+where George is not null
+
+union all
+select Lando, COUNT(id) OVER (PARTITION BY Lando) as L
+from [dbo].[data_for_merge]
+where Lando is not null
+
+union all
+select Lewis, COUNT(id) OVER (PARTITION BY Lewis) as W
+from [dbo].[data_for_merge]
+where Lewis is not null) as P)
+ AS T_Source --Таблица источник
+        ON (T_Base.[Function_name] = T_Source.Alex) --Условие объединения
+        WHEN NOT MATCHED THEN 
+				 INSERT ([Function_name],[Function_count]) 
+                 VALUES (T_Source.Alex, T_Source.Itog);
