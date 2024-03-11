@@ -1,0 +1,46 @@
+1
+select M.First_Name, M.Last_Name COUNT (1)
+from Employees E 
+JOIN Employees M ON E.Manager_id = M.Employee_id)
+group by M.first_name, M.Last_Name
+  HAVING COUNT (1) > 6
+
+2
+select D.department_name, J.min_salary-(J.min_salary*E.commission_pct) as minimal,
+                        J.max_salary-(J.max_salary*E.commission_pct) as maximal
+from Jobs J
+join Employees E on J.Job_ID=E.Job_ID
+join Departments D on E.Department_ID=D.Department_ID   
+
+3
+select P.Region_Name
+from
+  (select top 1 R.Region_Name, count(Employees_ID) as kol
+   from Regions R
+join Countries C on R.Region_ID=C.Region_ID
+join Locations L on C.Country_ID=L.Country_ID
+join Departments D on L.Location_ID=D.Location_ID
+join Employees E on D.Department_ID=E.Department_ID
+group by R.Region_Name
+order by kol desc) p
+
+4
+select Department_ID, avg (Salary) as avg_po_dep,
+  (select avg (Salary)
+   from Employees) as total_avg,
+          avg (Salary) - (select avg (Salary)
+                          from Employees) *100 as differ
+from Employees
+group by Department_ID
+
+5
+SELECT E.First_Name, E.Last_Name, DATEDIFF(YEAR, start_Date, end_Date) AS Razn
+FROM Employees E
+Left JOIN Job_History H ON E.Employee_id = H.Employee_id)
+where DATEDIFF(YEAR, start_Date, end_Date) >10
+
+6
+select First_Name, Last_Name
+from (select First_Name, Last_Name, Salary, DENSE_RANK () over (order by Salary desc) as DN
+      from Employees) p
+where DN between '5' and '10'
